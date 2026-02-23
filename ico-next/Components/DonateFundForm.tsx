@@ -1,25 +1,34 @@
 'use client'
-
-import { useBuyToken } from '@/hooks/useBuyToken'
+import { useDonateToken } from '@/hooks/useDonateToken'
 import { LoaderLayout } from './LoaderLayout'
+import { TokenBalanceBox } from './TokenBalanceBox'
+import { useProfile } from '@/hooks'
 
 export const DonateFundForm = () => {
+  const { profileData, refetch } = useProfile()
   const {
     amount,
     loading,
     error,
     changeAmount,
-    handleBuyToken
-  } = useBuyToken()
+    handleDonateToken
+  } = useDonateToken({ onSuccess: refetch })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await handleBuyToken()
+    await handleDonateToken()
   }
 
   return (
     <LoaderLayout isLoading={loading} message="Processing transaction...">
-      <form onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
+      <div className="mb-8 mt-2 w-full">
+        <TokenBalanceBox
+          userTokenBalance={profileData.userTokenBalance}
+          tokenSymbol={profileData.tokenDetails?.symbol}
+          onRefresh={refetch}
+        />
+      </div>
+      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-[30px]">
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 rounded-[10px] p-4">
             <p className="font-epilogue font-normal text-[14px] leading-[22px] text-red-400">

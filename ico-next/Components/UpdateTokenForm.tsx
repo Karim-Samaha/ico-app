@@ -7,8 +7,7 @@ import { TokenStatus } from './TokenStatus'
 export const TokenTransferForm = () => {
   const {
     amount,
-    to,
-    changeTo,
+
     loading,
     error,
     changeAmount,
@@ -30,7 +29,7 @@ export const TokenTransferForm = () => {
             </p>
           </div>
         )}
-
+        
         <div>
           <label className="flex-1 w-full flex flex-col">
             <span className="font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]">

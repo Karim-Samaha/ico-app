@@ -26,11 +26,12 @@ export const usePurchaseToken = ({ onSuccess }: UsePurchaseTokenProps = {}) => {
       setError(null)
       
       // Convert ether to wei (assuming 18 decimals)
-      const valueInWei = parseFloat(amount) * 1e18
+      const valueInWei = parseFloat(amount)
 
       await buyToken(valueInWei)
       setAmount('')
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error purchasing token:', err)
       const errorMessage = err.message || 'Failed to purchase token'

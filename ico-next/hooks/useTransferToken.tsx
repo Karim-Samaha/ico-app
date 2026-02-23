@@ -32,6 +32,7 @@ export const useTransferToken = ({ onSuccess }: UseTransferTokenProps = {}) => {
       await transferToken(to, parseFloat(amount))
       setAmount('')
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error transferring token:', err)
       const errorMessage = err.message || 'Failed to transfer token'

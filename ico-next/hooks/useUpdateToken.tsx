@@ -15,6 +15,7 @@ export const useUpdateToken = ({ onSuccess }: UseUpdateTokenProps = {}) => {
       setError(null)
       await updateToken()
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error updating token:', err)
       const errorMessage = err.message || 'Failed to update token'

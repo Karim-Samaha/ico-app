@@ -21,7 +21,7 @@ export const Profile = () => {
 
   const formatSupply = (supply: bigint | null) => {
     if (supply === null) return '-'
-    const supplyValue = Number(supply) / 1e18
+    const supplyValue = Number(supply) 
     return supplyValue.toLocaleString(undefined, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
@@ -69,6 +69,7 @@ export const Profile = () => {
           </div>
         </div>
 
+{console.log({profileData})}
         {/* Token Balance Section */}
         <TokenBalanceBox
           userTokenBalance={profileData.userTokenBalance}

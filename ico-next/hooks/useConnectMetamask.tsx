@@ -17,6 +17,7 @@ export const useConnectMetamask = ({ onSuccess }: UseConnectMetamaskProps = {}) 
       const connectedAccount = await connectMetamask()
       setAccount(connectedAccount)
       onSuccess?.(connectedAccount)
+      window.location.reload()
     } catch (err: any) {
       console.error('Error connecting to MetaMask:', err)
       const errorMessage = err.message || 'Failed to connect to MetaMask'

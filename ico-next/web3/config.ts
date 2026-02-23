@@ -1,5 +1,5 @@
-export const tokenAddress = "0x7DF30B5a10330Bb14E816C8e5A0C64B9B04B7027";
-export const contractAddress = "0x1de92D4Ec673100A1ef1E58Efc9676bed3a8291B";
+export const tokenAddress = "0x4f4210E16Eb276B22B692A356e6537F884F88BF4";
+export const contractAddress = "0xAf8092d03C7e326AF90110f24E3Dd4b4B67C59D6";
 export const IcoContractABI = [
   {
     "inputs": [
@@ -13,6 +13,25 @@ export const IcoContractABI = [
     "type": "constructor"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burnTokens",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "buyToken",
     "outputs": [
@@ -23,6 +42,25 @@ export const IcoContractABI = [
       }
     ],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_tokenAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "donateToken",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -655,7 +693,7 @@ export const tokenABI = [
     "inputs": [
       {
         "internalType": "address",
-        "name": "_to",
+        "name": "_from",
         "type": "address"
       },
       {
@@ -805,6 +843,19 @@ export const tokenABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "icoTokenContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -929,6 +980,19 @@ export const tokenABI = [
       }
     ],
     "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_icoTokenContract",
+        "type": "address"
+      }
+    ],
+    "name": "setIcoTokenContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -4,9 +4,11 @@ import { useWithdrawToken } from '@/hooks/useWithdrawToken'
 import { LoaderLayout } from './LoaderLayout'
 import { TokenStatus } from './TokenStatus'
 import { TokenBalanceBox } from './TokenBalanceBox'
-import { useProfile } from '@/hooks'
+import { useGetTokenSalePrice, useProfile } from '@/hooks'
+import { EquivalentInput } from './EquivalentInput'
 
 export const WithdrawForm = () => {
+  const { tokenSalePrice } = useGetTokenSalePrice()
   const { userBalance } = useProfile()
   const {
     amount,
@@ -57,7 +59,13 @@ export const WithdrawForm = () => {
             />
           </label>
         </div>
-
+        <EquivalentInput
+          amount={amount}
+          tokenSalePrice={tokenSalePrice as unknown as number}
+          label="ETH Equivalent"
+          placeholder="ETH amount will appear here"
+          calculationType="token-to-eth"
+        />
         <div className="flex justify-center items-center mt-[40px]">
           <button
             type="submit"

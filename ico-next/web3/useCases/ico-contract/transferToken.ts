@@ -15,18 +15,14 @@ export const transferToken = async (
   const tokenContract = await getTokenContract();
   const icoContract = await getIcoContract();
   
-  // Get token decimals to convert amount to smallest unit
-  const decimals = await tokenContract.decimals();
   
-  // Convert amount to smallest unit (e.g., 100 tokens -> 100 * 10^decimals)
-  const amountInSmallestUnit = parseUnits(amount.toString(), decimals);
   
   // Approve the ICO contract to spend tokens on behalf of the user
-  const approveTx = await tokenContract.approve(contractAddress, amountInSmallestUnit);
+  const approveTx = await tokenContract.approve(contractAddress, amount);
   await approveTx.wait();
   
   // Transfer tokens through the ICO contract
-  const tx = await icoContract.transferToken(to, amountInSmallestUnit);
+  const tx = await icoContract.transferToken(to, amount);
   return await tx.wait();
 };
 

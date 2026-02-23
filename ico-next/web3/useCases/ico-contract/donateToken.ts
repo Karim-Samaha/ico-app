@@ -4,11 +4,11 @@ import { contractAddress } from '../../config';
 import { parseUnits } from 'ethers';
 
 /**
- * Withdraw tokens from the contract
- * @param amount - Amount of tokens to withdraw (in human-readable format, e.g., 100.5)
+ * Donate tokens to the contract
+ * @param amount - Amount of tokens to donate (in human-readable format, e.g., 100.5)
  * @returns Transaction receipt
  */
-export const withdrawToken = async (
+export const donateToken = async (
   amount: number,
 ) => {
   const icoContract = await getIcoContract();
@@ -19,8 +19,8 @@ export const withdrawToken = async (
   const approveTx = await tokenContract.approve(contractAddress, amount);
   await approveTx.wait();
   
-  // Withdraw tokens from the contract
-  const tx = await icoContract.withdrowToken(amount);
+  // Donate tokens to the contract
+  const tx = await icoContract.donateToken(amount);
   return await tx.wait();
 };
 

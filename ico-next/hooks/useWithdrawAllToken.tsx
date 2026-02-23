@@ -15,6 +15,7 @@ export const useWithdrawAllToken = ({ onSuccess }: UseWithdrawAllTokenProps = {}
       setError(null)
       await withdrowAllToken()
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error withdrawing all tokens:', err)
       const errorMessage = err.message || 'Failed to withdraw all tokens'

@@ -27,6 +27,7 @@ export const useBuyToken = ({ onSuccess }: UseBuyTokenProps = {}) => {
       await buyToken(+amount)
       setAmount('')
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error buying token:', err)
       const errorMessage = err.message || 'Failed to buy token'

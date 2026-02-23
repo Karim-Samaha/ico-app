@@ -46,7 +46,6 @@ export const useProfile = () => {
 
       // Get wallet balance in ETH
       const walletBalance = await getWalletBalance(account)
-      console.log({ walletBalance, account })
       
       // Get token details (includes token address)
       const tokenDetails = await getTokenDeails()
@@ -54,6 +53,7 @@ export const useProfile = () => {
       let userBalance: bigint | null = null
       if (tokenDetails.tokenAdress) {
         userBalance = await getUserTokenBalance(tokenDetails.tokenAdress, account)
+        console.log({userBalance})
       }
       console.log({tokenDetails})
       setProfileData({
