@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-26d2dbc7afed046a77c979d1db004a04233291d7",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/IcoToken.sol": "project/contracts/IcoToken.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/IcoToken.sol": {
+        "content": "// //SPDX-License-Identifier: MIT\npragma solidity ^0.8.27;\n\nabstract contract ERC20 {\n    function transfer(\n        address recipient,\n        uint256 amount\n    ) public virtual returns (bool);\n    function balanceOf(address account) public view virtual returns (uint);\n    function allowance(\n        address owner,\n        address spender\n    ) public view virtual returns (uint256);\n    function approve(\n        address spender,\n        uint256 amount\n    ) public virtual returns (bool);\n    function transferFrom(\n        address _from,\n        address _to,\n        uint256 amount\n    ) public virtual returns (bool);\n    function symbol() public view virtual returns (string memory);\n    function totalSupply() public view virtual returns (uint256);\n    function name() public view virtual returns (string memory);\n    function decimals() public view virtual returns (uint8);\n    function burnFrom(address account, uint256 value) public virtual;\n}\n\ncontract IcoToken {\n    address public owner;\n    address tokenAddress;\n    uint256 public tokenSalePrice;\n    uint256 public soldTokens;\n    constructor(address _token) {\n        owner = msg.sender;\n        tokenAddress = _token;\n    }\n    modifier onlyOwner() {\n        require(msg.sender == owner, \"Only Owner can do this action\");\n        _;\n    }\n\n    function updateTokenSalePrice(uint256 _tokeSalePrice) public onlyOwner {\n        tokenSalePrice = _tokeSalePrice;\n    }\n\n\n    function buyToken() external payable returns (bool) {\n        require(msg.value > 0, \"Send ETH to buy tokens\");\n\n        uint256 tokensToBuy = msg.value / tokenSalePrice;\n\n        require(tokensToBuy > 0, \"ETH too small\");\n\n        uint256 tokenAmount = tokensToBuy * 1e18;\n\n        ERC20 token = ERC20(tokenAddress);\n\n        require(\n            token.balanceOf(address(this)) >= tokenAmount,\n            \"Not enough tokens in contract\"\n        );\n\n        token.transfer(msg.sender, tokenAmount);\n\n        soldTokens += tokensToBuy;\n\n        return true;\n    }\n\n    function getTokenDeails()\n        public\n        view\n        returns (\n            string memory name,\n            string memory symbol,\n            uint256 balance,\n            uint256 supply,\n            uint256 tokenPrice,\n            address tokenAdress,\n            uint256 tokensSold\n        )\n    {\n        ERC20 token = ERC20(tokenAddress);\n        return (\n            token.name(),\n            token.symbol(),\n            token.balanceOf(address(this)),\n            token.totalSupply(),\n            tokenSalePrice,\n            tokenAddress,\n            soldTokens\n        );\n    }\n\n    function transferToken(\n        address _to,\n        uint256 _amount\n    ) external returns (bool) {\n        ERC20 token = ERC20(tokenAddress);\n        require(\n            token.balanceOf(msg.sender) >= _amount,\n            \"insufficient fund to transfer\"\n        );\n        (bool status) = token.transferFrom(msg.sender, _to, _amount);\n        require(status, \"Falied to transfer tokens\");\n        return status;\n    }\n\n    function transferEther(\n        address _to,\n        uint256 _amount\n    ) public payable returns (bool) {\n        require(msg.value >= _amount, \"Insufficient ETH sent\");\n\n        // send ETH to recipient\n        (bool status, ) = payable(_to).call{value: _amount}(\"\");\n        require(status, \"Failed to transfer ETH\");\n\n        // refund excess ETH if any\n        uint256 refund = msg.value - _amount;\n        if (refund > 0) {\n            (bool refunded, ) = payable(msg.sender).call{value: refund}(\"\");\n            require(refunded, \"Failed to refund excess ETH\");\n        }\n\n        return true;\n    }\n\n    function withdrowToken(uint256 _tokenAmount) external returns (bool) {\n        require(_tokenAmount > 0, \"Token amount must be greater than 0\");\n        require(tokenSalePrice > 0, \"Token sale price not set\");\n\n        ERC20 token = ERC20(tokenAddress);\n        \n        // Calculate how many tokens (in base units) user is returning\n        uint256 tokensToReturn = _tokenAmount / 1e18;\n        require(tokensToReturn > 0, \"Token amount too small\");\n\n        // Calculate ETH refund based on token sale price\n        uint256 ethRefund = tokensToReturn * tokenSalePrice;\n        \n        \n        // Check contract has enough ETH\n        require(address(this).balance >= ethRefund, \"Insufficient ETH in contract\");\n\n        // Transfer tokens from user to contract\n        require(\n            token.balanceOf(msg.sender) >= _tokenAmount,\n            \"Insufficient token balance\"\n        );\n        require(\n            token.allowance(msg.sender, address(this)) >= _tokenAmount,\n            \"Insufficient token allowance. Please approve first\"\n        );\n        \n        (bool tokenStatus) = token.transferFrom(msg.sender, address(this), _tokenAmount);\n        require(tokenStatus, \"Failed to transfer tokens\");\n\n        // Update sold tokens count\n        require(soldTokens >= tokensToReturn, \"Cannot return more tokens than sold\");\n        soldTokens -= tokensToReturn;\n\n        // Transfer ETH back to user\n        (bool ethStatus, ) = payable(msg.sender).call{value: ethRefund}(\"\");\n        require(ethStatus, \"Failed to transfer ETH\");\n\n        return true;\n    }\n}\n"
+      }
+    }
+  }
+}
