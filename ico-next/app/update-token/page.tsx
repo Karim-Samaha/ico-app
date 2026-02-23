@@ -3,6 +3,7 @@ import { MintTokenForm } from '@/Components/MintTokenForm'
 import { BurnTokenForm } from '@/Components/BurnTokenForm'
 import { useIsOwner } from '@/hooks/useIsOwner'
 import { LoaderLayout } from '@/Components/LoaderLayout'
+import { TokenStatus } from '@/Components/TokenStatus'
 
 export default function UpdateTokenPage() {
   const { isOwner, loading } = useIsOwner()
@@ -37,14 +38,17 @@ export default function UpdateTokenPage() {
 
   return (
     <div className="flex justify-center sm:px-4 p-12">
-      <div className="w-full md:w-4/5 lg:w-3/5">
-        <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[10px] sm:p-10 p-4">
+      <div className="w-full md:w-4/5 lg:w-4/5">
+        <div className="bg-[#1c1c24] flex justify-center items-center flex-col rounded-[30px] sm:p-10 p-4">
           <h1 className="font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white text-center">
             Update Token
           </h1>
           <p className="font-epilogue font-normal text-[16px] leading-[26px] text-[#808191] mt-3 text-center">
             Mint or burn tokens for the current contract address
           </p>
+          <div className="mb-8 mt-2 w-full">
+            <TokenStatus   />
+          </div>
 
           <div className="w-full flex flex-col gap-12 mt-8">
             <div className="bg-[#1c1c24] border border-[#3a3a43] rounded-[10px] p-6">

@@ -2,38 +2,17 @@
 
 import { useProfile } from '@/hooks'
 import { LoaderLayout } from './LoaderLayout'
-import { formatEther } from 'ethers'
+import { TokenBalanceBox } from './TokenBalanceBox'
 
 export const Profile = () => {
-  const { profileData, loading, error, refetch } = useProfile()
+  const { profileData, userBalance, loading, error, refetch } = useProfile()
 
   const formatAddress = (address: string | null) => {
     if (!address) return '-'
     return `${address.slice(0, 6)}...${address.slice(-4)}`
   }
 
-  const formatBalance = (balance: bigint | null) => {
-    if (balance === null) return '-'
-    // Convert from wei to ether (assuming 18 decimals)
-    const etherValue = Number(balance) / 1e18
-    return etherValue.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 6
-    })
-  }
 
-  const formatWalletBalance = (balance: bigint | null) => {
-    if (balance === null || balance === undefined) return '-'
-    try {
-      // Convert from wei to ether using ethers utility (handles large bigints properly)
-      const etherValue = formatEther(balance)
-      // Return the full decimal representation
-      return etherValue
-    } catch (error) {
-      console.error('Error formatting wallet balance:', error)
-      return '-'
-    }
-  }
 
   const formatPrice = (price: bigint | null) => {
     if (price === null) return '-'
@@ -85,36 +64,17 @@ export const Profile = () => {
               Balance:
             </span>
             <span className="font-epilogue font-semibold text-[16px] leading-[26px] text-white">
-              {formatWalletBalance(profileData.walletBalance)} ETH
+              {userBalance} ETH
             </span>
           </div>
         </div>
 
         {/* Token Balance Section */}
-        <div className="bg-[#2c2f32] p-6 rounded-[10px]">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-epilogue font-medium text-[16px] leading-[22px] text-white">
-              Your Token Balance
-            </h3>
-            <button
-              type="button"
-              onClick={refetch}
-              className="font-epilogue font-normal text-[14px] leading-[22px] text-[#808191] hover:text-white transition-colors"
-            >
-              Refresh
-            </button>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="font-epilogue font-semibold text-[32px] leading-[40px] text-[#1dc071]">
-              {formatBalance(profileData.userTokenBalance)}
-            </span>
-            {profileData.tokenDetails && (
-              <span className="font-epilogue font-normal text-[18px] leading-[28px] text-[#808191]">
-                {profileData.tokenDetails.symbol}
-              </span>
-            )}
-          </div>
-        </div>
+        <TokenBalanceBox
+          userTokenBalance={profileData.userTokenBalance}
+          tokenSymbol={profileData.tokenDetails?.symbol}
+          onRefresh={refetch}
+        />
 
         {/* Token Information Section */}
         {profileData.tokenDetails && (

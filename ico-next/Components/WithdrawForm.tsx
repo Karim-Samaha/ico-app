@@ -2,8 +2,12 @@
 
 import { useWithdrawToken } from '@/hooks/useWithdrawToken'
 import { LoaderLayout } from './LoaderLayout'
+import { TokenStatus } from './TokenStatus'
+import { TokenBalanceBox } from './TokenBalanceBox'
+import { useProfile } from '@/hooks'
 
 export const WithdrawForm = () => {
+  const { userBalance } = useProfile()
   const {
     amount,
     loading,
@@ -19,7 +23,17 @@ export const WithdrawForm = () => {
 
   return (
     <LoaderLayout isLoading={loading} message="Processing transaction...">
-      <form onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
+      <div className="mb-8 mt-2 w-full">
+        <TokenBalanceBox
+          userWalletBalance={userBalance as unknown as number}
+          tokenSymbol="ETH"
+          onRefresh={() => window.location.reload()}
+        />
+      </div>
+      <div className="mb-8 mt-2 w-full">
+        <TokenStatus showTotalSupply={false} showAvailableToBuy={false} />
+      </div>
+      <form onSubmit={handleSubmit} className="w-full  flex flex-col gap-[30px]">
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 rounded-[10px] p-4">
             <p className="font-epilogue font-normal text-[14px] leading-[22px] text-red-400">

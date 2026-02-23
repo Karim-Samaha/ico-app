@@ -1,4 +1,5 @@
 import { getUserTokenBalance, getTokenDeails, getCurrentAccount, getWalletBalance } from '@/web3/useCases'
+import { formatEther } from 'ethers'
 import { useState, useEffect } from 'react'
 
 interface TokenDetails {
@@ -69,6 +70,18 @@ export const useProfile = () => {
       setLoading(false)
     }
   }
+  const formatWalletBalance = (balance: bigint | null) => {
+    if (balance === null || balance === undefined) return '-'
+    try {
+      // Convert from wei to ether using ethers utility (handles large bigints properly)
+      const etherValue = formatEther(balance)
+      // Return the full decimal representation
+      return etherValue
+    } catch (error) {
+      console.error('Error formatting wallet balance:', error)
+      return '-'
+    }
+  }
 
   useEffect(() => {
     fetchProfile()
@@ -78,6 +91,7 @@ export const useProfile = () => {
     profileData,
     loading,
     error,
+    userBalance: formatWalletBalance(profileData.walletBalance),
     refetch: fetchProfile
   }
 }

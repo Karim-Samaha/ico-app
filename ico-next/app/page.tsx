@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { payment, money, withdraw, tagType, profile } from "@/assets";
+import { TokenStatus } from "@/Components/TokenStatus";
 
 export default function Home() {
   const features = [
@@ -74,6 +75,10 @@ export default function Home() {
           <p className="font-epilogue font-normal text-[18px] leading-[28px] text-[#808191]">
             Manage your tokens and funds with ease
           </p>
+        </div>
+
+        <div className="mb-8">
+          <TokenStatus />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -2,6 +2,7 @@
 
 import { usePurchaseToken } from '@/hooks/usePurchaseToken'
 import { LoaderLayout } from './LoaderLayout'
+import { TokenStatus } from './TokenStatus'
 
 export const PurchaseTokenForm = () => {
   const {
@@ -19,7 +20,10 @@ export const PurchaseTokenForm = () => {
 
   return (
     <LoaderLayout isLoading={loading} message="Processing transaction...">
-      <form onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
+      <div className="mb-8 mt-2 w-full">
+        <TokenStatus showTotalSupply={false}/>
+      </div>
+      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-[30px]">
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 rounded-[10px] p-4">
             <p className="font-epilogue font-normal text-[14px] leading-[22px] text-red-400">

@@ -1,6 +1,7 @@
 'use client'
 import { useBurnToken } from '@/hooks/useBurnToken'
 import { LoaderLayout } from './LoaderLayout'
+import { TokenStatus } from './TokenStatus'
 
 export const BurnTokenForm = () => {
   const {

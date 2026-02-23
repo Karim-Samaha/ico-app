@@ -1,8 +1,12 @@
 'use client'
 import { useTransferEther } from '@/hooks/useTransferEther'
 import { LoaderLayout } from './LoaderLayout'
+import { TokenBalanceBox } from './TokenBalanceBox'
+import { useProfile } from '@/hooks'
 
 export const TransferFundForm = () => {
+  const {  userBalance } = useProfile()
+
   const {
     to,
     amount,
@@ -20,6 +24,13 @@ export const TransferFundForm = () => {
 
   return (
     <LoaderLayout isLoading={loading} message="Processing transaction...">
+       <div className="mb-8 mt-2 w-full">
+        <TokenBalanceBox
+          userWalletBalance={userBalance as unknown as number}
+          tokenSymbol="ETH"
+          onRefresh={() => window.location.reload()}
+        />
+      </div>
       <form onSubmit={handleSubmit} className="w-full mt-[65px] flex flex-col gap-[30px]">
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 rounded-[10px] p-4">
