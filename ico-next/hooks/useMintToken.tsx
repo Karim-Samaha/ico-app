@@ -31,6 +31,7 @@ export const useMintToken = ({ onSuccess }: UseMintTokenProps = {}) => {
       await mintToken(parseFloat(amount))
       setAmount('')
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error minting token:', err)
       const errorMessage = err.message || 'Failed to mint token'

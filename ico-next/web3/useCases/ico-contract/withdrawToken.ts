@@ -14,18 +14,13 @@ export const withdrawToken = async (
   const icoContract = await getIcoContract();
   const tokenContract = await getTokenContract();
   
-  // Get token decimals to convert amount to smallest unit
-  const decimals = await tokenContract.decimals();
-  
-  // Convert amount to smallest unit (e.g., 1 token -> 1 * 10^18 wei)
-  const amountInSmallestUnit = parseUnits(amount.toString(), decimals);
   
   // Approve the ICO contract to spend tokens on behalf of the user
-  const approveTx = await tokenContract.approve(contractAddress, amountInSmallestUnit);
+  const approveTx = await tokenContract.approve(contractAddress, amount);
   await approveTx.wait();
   
   // Withdraw tokens from the contract
-  const tx = await icoContract.withdrowToken(amountInSmallestUnit);
+  const tx = await icoContract.withdrowToken(amount);
   return await tx.wait();
 };
 

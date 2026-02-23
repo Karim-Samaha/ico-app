@@ -12,4 +12,5 @@ export { withdrawToken } from './withdrawToken';
 export { getUserTokenBalance } from './getUserTokenBalance';
 export { mintToken } from './mintToken';
 export { burnToken } from './burnToken';
+export { donateToken } from './donateToken';
 

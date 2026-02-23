@@ -27,6 +27,7 @@ export const useBurnToken = ({ onSuccess }: UseBurnTokenProps = {}) => {
       await burnToken(parseFloat(amount))
       setAmount('')
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error burning token:', err)
       const errorMessage = err.message || 'Failed to burn token'

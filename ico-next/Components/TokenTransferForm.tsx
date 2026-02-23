@@ -1,7 +1,9 @@
 'use client'
 
 import { useProfile, useTransferToken } from '@/hooks'
+import { useGetTokenSalePrice } from '@/hooks/useGetTokenSalePrice'
 import { LoaderLayout } from './LoaderLayout'
+import { EquivalentInput } from './EquivalentInput'
 import { TokenBalanceBox } from './TokenBalanceBox'
 
 export const TokenTransferForm = () => {
@@ -16,6 +18,8 @@ export const TokenTransferForm = () => {
     handleTransferToken
   } = useTransferToken()
 
+  const { tokenSalePrice } = useGetTokenSalePrice()
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     await handleTransferToken()
@@ -23,7 +27,6 @@ export const TokenTransferForm = () => {
 
   return (
     <LoaderLayout isLoading={loading} message="Processing transaction...">
-
       <div className="mb-8 mt-2 w-full">
         <TokenBalanceBox
           userTokenBalance={profileData.userTokenBalance}
@@ -58,18 +61,26 @@ export const TokenTransferForm = () => {
         <div>
           <label className="flex-1 w-full flex flex-col">
             <span className="font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]">
-              Amount (in wei) *
+              Token Amount *
             </span>
             <input
               type="number"
               step="1"
-              placeholder="Enter amount in wei"
+              placeholder="Enter token amount"
               value={amount}
               onChange={(e) => changeAmount(e.target.value)}
               className="py-[15px] sm:px-[25px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[14px] placeholder:text-[#4b5264] rounded-[10px] sm:min-w-[300px]"
             />
           </label>
         </div>
+
+        <EquivalentInput
+          amount={amount}
+          tokenSalePrice={tokenSalePrice as unknown as number}
+          label="ETH Equivalent"
+          placeholder="ETH amount will appear here"
+          calculationType="token-to-eth"
+        />
 
         <div className="flex justify-center items-center mt-[40px]">
           <button
@@ -84,4 +95,3 @@ export const TokenTransferForm = () => {
     </LoaderLayout>
   )
 }
-

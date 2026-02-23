@@ -27,6 +27,7 @@ export const useWithdrawToken = ({ onSuccess }: UseWithdrawTokenProps = {}) => {
       await withdrawToken(parseFloat(amount))
       setAmount('')
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error withdrawing token:', err)
       const errorMessage = err.message || 'Failed to withdraw token'

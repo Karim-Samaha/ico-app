@@ -27,6 +27,7 @@ export const useUpdateTokenSalePrice = ({ onSuccess }: UseUpdateTokenSalePricePr
       await updateTokenSalePrice(+tokenSalePrice)
       setTokenSalePrice('')
       onSuccess?.()
+      window.location.reload()
     } catch (err: any) {
       console.error('Error updating token sale price:', err)
       const errorMessage = err.message || 'Failed to update token sale price'

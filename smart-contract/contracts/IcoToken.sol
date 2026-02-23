@@ -31,8 +31,8 @@ abstract contract ERC20 {
 contract IcoToken {
     address public owner;
     address tokenAddress;
-    uint256 public tokenSalePrice;
-    uint256 public soldTokens;
+    uint256 public tokenSalePrice; // Price in wei per token wei (1:1 ratio when set to 1 wei)
+    uint256 public soldTokens; // Tracks tokens sold in token wei units
     constructor(address _token) {
         owner = msg.sender;
         tokenAddress = _token;
@@ -54,7 +54,7 @@ contract IcoToken {
 
         require(tokensToBuy > 0, "ETH too small");
 
-        uint256 tokenAmount = tokensToBuy * 1e18;
+        uint256 tokenAmount = tokensToBuy;
 
         ERC20 token = ERC20(tokenAddress);
 
@@ -135,8 +135,8 @@ contract IcoToken {
 
         ERC20 token = ERC20(tokenAddress);
         
-        // Calculate how many tokens (in base units) user is returning
-        uint256 tokensToReturn = _tokenAmount / 1e18;
+        // Calculate tokens to return (already in token wei, no conversion needed)
+        uint256 tokensToReturn = _tokenAmount;
         require(tokensToReturn > 0, "Token amount too small");
 
         // Calculate ETH refund based on token sale price
@@ -166,6 +166,38 @@ contract IcoToken {
         // Transfer ETH back to user
         (bool ethStatus, ) = payable(msg.sender).call{value: ethRefund}("");
         require(ethStatus, "Failed to transfer ETH");
+
+        return true;
+    }
+
+    function donateToken(uint256 _tokenAmount) external returns (bool) {
+        require(_tokenAmount > 0, "Token amount must be greater than 0");
+
+        ERC20 token = ERC20(tokenAddress);
+        
+        // Calculate tokens to donate (already in token wei, no conversion needed)
+        uint256 tokensToDonate = _tokenAmount;
+        require(tokensToDonate > 0, "Token amount too small");
+
+        // Check user has enough tokens
+        require(
+            token.balanceOf(msg.sender) >= _tokenAmount,
+            "Insufficient token balance"
+        );
+        
+        // Check user has approved the contract
+        require(
+            token.allowance(msg.sender, address(this)) >= _tokenAmount,
+            "Insufficient token allowance. Please approve first"
+        );
+        
+        // Transfer tokens from user to contract
+        (bool tokenStatus) = token.transferFrom(msg.sender, address(this), _tokenAmount);
+        require(tokenStatus, "Failed to transfer tokens");
+
+        // Update sold tokens count to reflect tokens returned to contract
+        require(soldTokens >= tokensToDonate, "Cannot donate more tokens than sold");
+        soldTokens -= tokensToDonate;
 
         return true;
     }

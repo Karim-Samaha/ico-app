@@ -50,7 +50,7 @@ export const TokenStatus = ({
 
   const formatSupply = (supply: bigint | null) => {
     if (supply === null) return '-'
-    const supplyValue = Number(supply) / 1e18
+    const supplyValue = Number(supply)
     return supplyValue.toLocaleString(undefined, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
@@ -68,8 +68,8 @@ export const TokenStatus = ({
 
   const formatAvailable = (supply: bigint | null, tokensSold: bigint | null) => {
     if (supply === null || tokensSold === null) return '-'
-    const supplyValue = Number(supply) / 1e18
-    const soldValue = Number(tokensSold) / 1e18
+    const supplyValue = Number(supply) 
+    const soldValue = Number(tokensSold) 
     return (supplyValue - soldValue).toLocaleString(undefined, {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
